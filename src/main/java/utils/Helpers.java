@@ -1,0 +1,40 @@
+package utils;
+
+import io.cucumber.java.After;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+
+public class Helpers extends PageObject {
+
+        public String ReOrdenarCadena(String cadena){
+            String[] separarFechaHora = cadena.split(" ");
+            String[] separarFecha = separarFechaHora[0].split("-");
+            return separarFecha[2]+"-"+separarFecha[1]+"-"+separarFecha[0];
+        }
+
+        public void esperaSeleniumExplita(WebElementFacade objeto){
+            WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOf(objeto));
+        }
+
+        public void esperaImplicit(WebElementFacade element){
+            WebDriverWait wait1 = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+            wait1.until(ExpectedConditions.visibilityOf(element));
+            wait1.until(ExpectedConditions.elementToBeClickable(element));
+        }
+
+        public void javaScriptClick(WebElementFacade elemento){
+            esperaSeleniumExplita(elemento);
+            ((JavascriptExecutor) this.getDriver()).executeScript("arguments[0].click();",
+                    elemento);
+        }
+
+        @After
+        public void cerrarDriver() {
+            this.getDriver().close();
+        }
+}
